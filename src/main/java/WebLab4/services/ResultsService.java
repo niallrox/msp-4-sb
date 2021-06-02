@@ -44,7 +44,7 @@ public class ResultsService {
         double r = point.getR();
         if (x <= 3 && x >= -5 && y <= 3 && y >= -3 && DoubleStream.of(1, 1.5, 2, 2.5, 3).anyMatch(a -> a == r)) {
             String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy hh:mm:ss"));
-            String resultOfCheck = checkArea(x, y, r);
+            boolean resultOfCheck = checkArea(x, y, r);
             Result result = new Result(y, x, r, resultOfCheck, time);
             resultsRepository.save(fromResultToResultDB(result));
             return result;
@@ -53,17 +53,17 @@ public class ResultsService {
         }
     }
 
-    private String checkArea(double x, double y, double r) {
+    private boolean checkArea(double x, double y, double r) {
         if (x < 0 && y > 0 && x > -r && y < r) {
-            return "true";
+            return true;
         }
         if (x > 0 && y > 0 && y <= -2 * x + r) {
-            return "true";
+            return true;
         }
         if (x >= 0 && y <= 0 && Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r, 2)) {
-            return "true";
+            return true;
         }
-        return "false";
+        return false;
     }
 
     private ResultDB fromResultToResultDB(Result result) {
@@ -71,7 +71,7 @@ public class ResultsService {
         resultDB.setY(result.getY());
         resultDB.setX(result.getX());
         resultDB.setR(result.getR());
-        resultDB.setResult(result.getResult());
+        resultDB.setResult(String.valueOf(result.isResult()));
         resultDB.setTime(result.getTime());
         auth = SecurityContextHolder.getContext().getAuthentication();
         resultDB.setLogin(auth.getName());

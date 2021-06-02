@@ -11,6 +11,6 @@ public class Result {
     private double y;
     private double x;
     private double r;
-    private String result;
+    private boolean result;
     private String time;
 }
